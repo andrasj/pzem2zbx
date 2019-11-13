@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "pzem004tToZabbix": {
+      "commandName": "Project",
+      "commandLineArgs": "-s 192.168.10.3 -h Bites -p 10051 -d COM12"
+    }
+  }
+}
