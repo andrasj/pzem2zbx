@@ -2,7 +2,9 @@
   "profiles": {
     "pzem004tToZabbix": {
       "commandName": "Project",
-      "commandLineArgs": "-s 192.168.10.3 -h Bites -p 10051 -d COM12"
+      "commandLineArgs": "-s 192.168.10.3 -h Bites -p 10051 -d 192.168.10.3:1212"
+      // /opt/bin/socat -d -d -d tcp4-listen:1212,fork /dev/ttyRTUpzem
+
     }
   }
 }

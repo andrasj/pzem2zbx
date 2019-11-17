@@ -1,35 +1,33 @@
 ﻿using System;
-using System.IO.Ports;
 using Modbus.Device;
 
 namespace pzem004tToZabbix
 {
-    public class Pzem004TDevice : IDisposable
+    public abstract class Pzem004TDeviceBase : IDisposable
     {
-        private SerialPort _serialPort;
-        private ModbusSerialMaster _modbusMaster;
+        private ModbusMaster _modbusMaster;
+        public abstract void Open();
 
-        public Pzem004TDevice(string serialPort)
+        protected void InitModbusMaster(ModbusMaster modbusMaster)
         {
-            _serialPort = new SerialPort(serialPort, 9600, Parity.None, 8, StopBits.One);
-            _modbusMaster = Modbus.Device.ModbusSerialMaster.CreateRtu(_serialPort);
-        }
-
-        public void Open()
-        {
-            _serialPort.Open();
+            _modbusMaster = modbusMaster;
         }
 
         public Measurements ReadData()
         {
             ushort[] registers = _modbusMaster.ReadInputRegisters(1, 0, 10);
-            return new Measurements(registers[0] / 10.0);
+            double voltage = registers[0] / 10.0;
+            double current = (registers[1] + (registers[2] << 16)) / 1000.0;
+            double power = (registers[3] + (registers[4] << 16)) / 10.0;
+            double energy = registers[5] + (registers[6] << 16);
+            double frequency = registers[7] / 10.0;
+            double powerFactor = registers[8] / 100.0;
+            return new Measurements(voltage, current, power, energy, frequency, powerFactor);
         }
 
-        public void Dispose()
+        public virtual void Dispose()
         {
             _modbusMaster?.Dispose();
-            _serialPort?.Dispose();
         }
     }
 }

@@ -1,12 +1,29 @@
-﻿namespace pzem004tToZabbix
+﻿using Newtonsoft.Json;
+
+namespace pzem004tToZabbix
 {
     public class Measurements
     {
-        public Measurements(double voltage)
+        public Measurements(double voltageV, double currentA, double powerW, double energyWh, double frequencyHz, double powerFactor)
         {
-            Voltage = voltage;
+            VoltageV = voltageV;
+            CurrentA = currentA;
+            PowerW = powerW;
+            EnergyWh = energyWh;
+            FrequencyHz = frequencyHz;
+            PowerFactor = powerFactor;
         }
 
-        public double Voltage { get; }
+        public double VoltageV { get; }
+        public double CurrentA { get; }
+        public double PowerW { get; }
+        public double EnergyWh { get; }
+        public double FrequencyHz { get; }
+        public double PowerFactor { get; }
+
+        public override string ToString()
+        {
+            return JsonConvert.SerializeObject(this);
+        }
     }
 }
